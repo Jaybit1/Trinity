@@ -1,12 +1,6 @@
 package com.trinity.trinity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.service.notification.NotificationListenerService;
-import android.service.notification.StatusBarNotification;
-
-import com.trinity.trinity.client.MainActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
