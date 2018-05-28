@@ -37,8 +37,8 @@ public class Trinity {
     }
 
     public static void setup() {
-        String ip = "192.168.178.39";
-        int port = 25565;
+        String ip = "192.168.178.54";
+        int port = 54545;
         try {
             client = Client.createClient(ip, port, 2000);
             client.getEventManager().registerListener(new EventListener());

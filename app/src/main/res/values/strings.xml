@@ -3,4 +3,5 @@
     <string name="event_authenticated">Beim Homeserver authentifiziert!</string>
     <string name="event_connect">Mit Homeserver verbunden!</string>
     <string name="event_disconnect">Vom Homeserver getrennt!</string>
+    <string name="event_connection_failed">Verbindungsaufbau zum Homeserver fehlgeschlagen!</string>
 </resources>
