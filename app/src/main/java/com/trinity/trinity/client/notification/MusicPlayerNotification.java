@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NotificationCompat;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.trinity.trinity.R;
@@ -51,6 +53,8 @@ public class MusicPlayerNotification {
         // Progressbar setup
 
         notificationView.setProgressBar(R.id.media_status_progress, MAX_PROGRESS, 0, false);
+        notification = new NotificationCompat.Builder(MainActivity.getInstance()).setSmallIcon(R.drawable.media_music_triplet_icon).
+                setWhen(System.currentTimeMillis()).setCustomContentView(notificationView).build();
 
         // Sending Notification
 
@@ -64,7 +68,7 @@ public class MusicPlayerNotification {
             return;
         RemoteViews remoteViews = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.media_music_notification);
         remoteViews.setProgressBar(R.id.media_status_progress, MAX_PROGRESS, progress, false);
-        notification.contentView = remoteViews;
+        notification.bigContentView = remoteViews;
         NotificationSystem.getInstance().send(Notifications.MUSIC_PLAYER, notification);
     }
 
