@@ -9,12 +9,36 @@ import com.trinity.trinity.client.information.InformationFetcher;
 import com.trinity.trinity.client.soundsystem.SoundSystem;
 import com.trinity.trinity.client.soundsystem.TTS;
 import com.trinity.trinity.client.soundsystem.music.MusicPlayer;
+import com.trinity.trinity.client.syntax.SyntaxLibrary;
+import com.trinity.trinity.client.syntax.SyntaxList;
+import com.trinity.trinity.client.syntax.TrinityTask;
 
 public class CommandHandler {
 
     private static Runnable QNA_Action;
 
-    public static void onCommand (final String cmd) {
+    public static void onCommand (String cmd) {
+
+        //Testing advanced syntax...
+        TrinityTask task = SyntaxLibrary.getTrinityTaskFromSentence(cmd);
+        if (task != TrinityTask.NONE) {
+            if (task == TrinityTask.PLAY_MUSIC) {
+                cmd = Commands.media.music.PLAY[0];
+            } else if (task == TrinityTask.STOP_MUSIC) {
+                cmd = Commands.generic.STOP[0];
+            } else if (task == TrinityTask.IS_MUSIC) {
+                Trinity.log(MusicPlayer.getInstance().isPlaying() ? "Ich spiele gerade Musik." : "Ich spiele gerade keine Musik.");
+                return;
+            } else if (task == TrinityTask.CONNECT) {
+                cmd = Commands.server.CONNECT[0];
+            } else if (task == TrinityTask.DISCONNECT) {
+                cmd = Commands.server.DISCONNECT[0];
+            } else if (task == TrinityTask.IS_CONNECTED) {
+                Trinity.log(Trinity.getClient().isConnected() ? "Ich bin mit dem Homeserver verbunden." : "Ich bin nicht mit dem Homeserver verbunden.");
+                return;
+            }
+        }
+
         if (cmdEqualTo(cmd, Commands.generic.STOP))
             SoundSystem.stopSounds();
         else if (cmdEqualTo(cmd, Commands.generic.NEXT))
@@ -56,10 +80,11 @@ public class CommandHandler {
             return;
 
         else {
+            final String out = cmd;
             executeQNA("Ich bin mir nicht sicher, was ich tun soll. Soll ich nach " + cmd + " auf Google suchen?", new Runnable() {
                 @Override
                 public void run() {
-                    InformationFetcher.getInstance().executeGoogleSearch(cmd);
+                    InformationFetcher.getInstance().executeGoogleSearch(out);
                 }
             });
         }
