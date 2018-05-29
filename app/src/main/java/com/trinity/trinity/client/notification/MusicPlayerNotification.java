@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -22,7 +23,7 @@ public class MusicPlayerNotification {
 
     @SuppressWarnings("deprecation")
     public static void setNotification(String songName, String songArtist) {
-        Notification notification = new Notification(R.drawable.media_music_triplet_icon, null, System.currentTimeMillis());
+        //Notification notification = new Notification(R.drawable.media_music_triplet_icon, null, System.currentTimeMillis());
         RemoteViews notificationView = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.media_music_notification);
 
         // Text setup
@@ -33,8 +34,8 @@ public class MusicPlayerNotification {
         Intent notificationIntent = new Intent(MainActivity.getInstance(), RemoteControlReceiver.class);
         PendingIntent pendingNotificationIntent = PendingIntent.getActivity(MainActivity.getInstance(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        notification.contentView = notificationView;
-        notification.contentIntent = pendingNotificationIntent;
+        //notification.contentView = notificationView;
+        //notification.contentIntent = pendingNotificationIntent;
 
         // Buttons setup
 
@@ -53,13 +54,16 @@ public class MusicPlayerNotification {
         // Progressbar setup
 
         notificationView.setProgressBar(R.id.media_status_progress, MAX_PROGRESS, 0, false);
-        notification = new NotificationCompat.Builder(MainActivity.getInstance()).setSmallIcon(R.drawable.media_music_triplet_icon).
-                setWhen(System.currentTimeMillis()).setCustomContentView(notificationView).build();
+        /*notification = new NotificationCompat.Builder(MainActivity.getInstance()).setSmallIcon(R.drawable.media_music_triplet_icon).
+                setWhen(System.currentTimeMillis()).setCustomBigContentView(notificationView).setContentIntent(pendingNotificationIntent)
+                .setCategory(Notification.CATEGORY_PROGRESS).build();*/
+        notification = new NotificationCompat.Builder((MainActivity.getInstance())).setCustomBigContentView(notificationView).
+                setSmallIcon(R.drawable.media_music_triplet_icon).setOngoing(true).setPriority(Notification.PRIORITY_MAX).setAutoCancel(false).
+                setContentIntent(pendingNotificationIntent).addAction(R.id.media_action_playpause, "title", pendingSwitchIntent).build();
 
         // Sending Notification
 
         NotificationSystem.getInstance().send(Notifications.MUSIC_PLAYER, notification);
-        MusicPlayerNotification.notification = notification;
     }
 
     @SuppressWarnings("deprecation")
@@ -68,7 +72,8 @@ public class MusicPlayerNotification {
             return;
         RemoteViews remoteViews = new RemoteViews(MainActivity.getInstance().getPackageName(), R.layout.media_music_notification);
         remoteViews.setProgressBar(R.id.media_status_progress, MAX_PROGRESS, progress, false);
-        notification.bigContentView = remoteViews;
+        //notification.bigContentView = remoteViews;
+        notification.bigContentView.setProgressBar(R.id.media_status_progress, MAX_PROGRESS, progress, false);
         NotificationSystem.getInstance().send(Notifications.MUSIC_PLAYER, notification);
     }
 
@@ -87,18 +92,19 @@ public class MusicPlayerNotification {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
                     R.layout.media_music_notification);
             String action = intent.getAction();
+            Log.d("trinity", "click");
 
             if (action.equalsIgnoreCase(Notifications.actions.PLAY)) {
                 if (mp.isPlaying()){
                     mp.pause();
                     remoteViews.setImageViewResource(R.id.media_action_playpause, R.drawable.media_music_play);
-                    notification.contentView = remoteViews;
+                    notification.bigContentView = remoteViews;
                     NotificationSystem.getInstance().send(Notifications.MUSIC_PLAYER, notification);
                 }
                 else {
                     mp.startPlaying();
                     remoteViews.setImageViewResource(R.id.media_action_playpause, R.drawable.media_music_pause);
-                    notification.contentView = remoteViews;
+                    notification.bigContentView = remoteViews;
                     NotificationSystem.getInstance().send(Notifications.MUSIC_PLAYER, notification);
                 }
             }
