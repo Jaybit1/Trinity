@@ -15,7 +15,8 @@
 
         <service android:name="com.trinity.trinity.client.notification.KillNotificationService"></service>
 
-        <activity android:name="com.trinity.trinity.client.MainActivity">
+        <activity android:name="com.trinity.trinity.client.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

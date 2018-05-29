@@ -3,6 +3,7 @@ package com.trinity.trinity.client.soundsystem;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.trinity.trinity.R;
@@ -35,7 +37,7 @@ public class STT implements RecognitionListener {
 
 
     TextView returnResult;
-    Button listenButton;
+    ImageButton listenButton;
 
     private SpeechRecognizer speech;
     private Intent intent;
@@ -70,6 +72,7 @@ public class STT implements RecognitionListener {
         if (!isListening) {
             isListening = true;
             speech.startListening(intent);
+            listenButton.setColorFilter(Color.rgb(45, 188, 255));
         }
     }
 
@@ -103,6 +106,7 @@ public class STT implements RecognitionListener {
                 }
             }, 500);
         }
+        listenButton.setColorFilter(Color.rgb(100, 100, 100));
 
     }
 
